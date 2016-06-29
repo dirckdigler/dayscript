@@ -1,0 +1,83 @@
+<?php
+
+
+/**
+ * @file
+ * This is the file description for form custom ('DAYSCRIPT').
+ *
+ * In this more verbose, multi-line description, you can specify what this
+ * file does exactly.
+ *
+ * @author Edwin Vega Moreno ('Developer Web Junior('Drupal')')
+ */
+
+/**
+* Implements hook_schema()
+*/
+function dayscript_schema() {
+
+	$schema['example_users'] = array(
+	    'description' => 'This is a table for my custom module',
+	    'fields' => array(
+		    	'uid' => array(
+			        'description' => 'Identificador de la tabla.',
+			        'type' => 'serial',
+			        'unsigned' => TRUE,
+			        'not null' => TRUE
+	    		),
+
+				'name' => array(
+					'description' => t('Name'),
+					'type' => 'varchar',
+					'length' => 255,
+					'not null' => TRUE,
+					'default' => ''
+				),
+
+				'identification' => array(
+					'description' => t('Identification'),
+					'type' => 'int',
+					'unsigned' => TRUE,
+					'not null' => TRUE,        
+					'default' => 0
+				),
+
+				'date' => array(
+					'description' => t('Born date'),
+					'type' => 'varchar',
+					'length' => 255,
+					'not null' => TRUE,
+					'default' => ''
+				),      
+
+				'work' => array(
+					'description' => t('Work'),
+					'type' => 'varchar',
+					'length' => 255,
+					'not null' => TRUE,
+					'default' => ''
+				),
+
+
+				'state' => array(
+					'description' => t('State'),
+					'type' => 'int',
+					'unsigned' => TRUE,
+					'not null' => TRUE,        
+					'default' => 0
+				),
+		),
+	    'primary key' => array('uid'),
+  	);
+
+  	return $schema;
+}
+
+
+/**
+* Implements hook_uninstall()
+*/
+function dayscript_uninstall() {
+
+    node_type_delete('example_users');
+}

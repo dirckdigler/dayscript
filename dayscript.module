@@ -1,0 +1,69 @@
+<?php
+
+/**
+ * @file
+ * This is the file that provides a quick look to show the main Drupal hooks for presenting to DAYSCRIPT
+ *
+ * @author Edwin Vega Moreno ('Developer Web Junior('Drupal')')
+ */
+
+/**
+ * Implements hook_menu().
+ */
+function dayscript_menu() {
+
+	$items = array();
+
+	$items['example_module/form'] = array(
+	    'title' => 'Formulario de pruebas Dayscript',
+	    'description' => 'testing',
+	    'page callback' => 'drupal_get_form',
+	    'page arguments' => array('dayscript_form'),
+	    'access callback' => TRUE,
+	    'file' => 'includes/dayscript.forms.inc',
+  	);
+	$items['verified/identification'] = array(
+	    'page callback' => '_retrieve_identification_validate',
+	    'page arguments' => array(),
+	    'type' => MENU_CALLBACK,
+	    'access callback' => TRUE,
+	    'file' => 'includes/dayscript.functions.inc',
+  	);
+	return $items;
+}
+
+/**
+ * Implements hook_form_validate().
+ */
+function dayscript_form_validate($form, &$form_state) {
+
+	// get values from dayscript_form 
+	$identification = $form_state['values']['identification'];
+	$name           = $form_state['values']['username'];
+	$month 			= $form_state['values']['date']['month'];
+	$day 			= $form_state['values']['date']['day'];
+	$year 			= $form_state['values']['date']['year'];
+	$date 			= $day.'-'.$month.'-'.$year;
+	$work 			= $form_state['values']['work'];
+
+	$validateAlphanumeric = _validate_alphanumeric_string($name);
+	$validateNumeric = _validate_numeric($identification, $error_message);
+	$getNameWork = _get_name_work($work);
+
+	$validate = TRUE;
+
+	if (!$validateAlphanumeric == TRUE) {
+		form_set_error($name, t('The name field only accepts alphanumeric characters'));
+		$validate = FALSE;
+	}
+	if (!$validateNumeric == TRUE) {
+		form_set_error($identification, t($error_message));
+		$validate = FALSE;
+	}
+
+	if ($validate) {
+		_insert_values_database($identification, $name, $date, $work);
+	}	else {
+			watchdog('Dayscript', "There are inconsistencies filling out the form", NULL, WATCHDOG_ERROR);
+	}
+}

@@ -1,0 +1,11 @@
+name = Dayscript
+description = Form Custom integer db mysql.
+version = "7.x"
+core = 7.x
+package = Dayscript
+
+files[] = includes/dayscript.forms.inc
+files[] = includes/dayscript.functions.inc
+
+scripts[] = js/jquery.validate.js
+scripts[] = js/after_ajax.js
