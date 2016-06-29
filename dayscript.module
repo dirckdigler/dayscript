@@ -19,7 +19,8 @@ function dayscript_menu() {
 	    'description' => 'testing',
 	    'page callback' => 'drupal_get_form',
 	    'page arguments' => array('dayscript_form'),
-	    'access callback' => TRUE,
+	    'access callback' => 'user_access',
+	    'access arguments' => array('acces to menu Dayscript'),
 	    'file' => 'includes/dayscript.forms.inc',
   	);
 	$items['verified/identification'] = array(
@@ -29,41 +30,40 @@ function dayscript_menu() {
 	    'access callback' => TRUE,
 	    'file' => 'includes/dayscript.functions.inc',
   	);
+  	$items['admin/config/system/quiz'] = array(
+	      'title' => t('Quiz for people'),
+	      'description' => t('Form for get info of people'),
+	      'file' => 'includes/dayscript.forms.inc',
+	      'page callback' => 'drupal_get_form',
+	      'page arguments' => array('dayscript_form'),
+	);
+	$items['admin/config/system/quiz/settings'] = array(    
+	      'title'   => t('WELCOME QUIZ'),
+		  'type'    => MENU_DEFAULT_LOCAL_TASK,
+	 	  'weight'  => 1,
+	);
+
 	return $items;
 }
 
 /**
- * Implements hook_form_validate().
+ * Implements hook_permission().
  */
-function dayscript_form_validate($form, &$form_state) {
+function dayscript_permission() {
+   return array(
+     'acces to menu Dayscript' =>  array(
+       'title' => t('Acces to Dayscript form'),
+       'description' => t('Allows access to fill out the Dayscript form'),
+     ),
+   );
+}
 
-	// get values from dayscript_form 
-	$identification = $form_state['values']['identification'];
-	$name           = $form_state['values']['username'];
-	$month 			= $form_state['values']['date']['month'];
-	$day 			= $form_state['values']['date']['day'];
-	$year 			= $form_state['values']['date']['year'];
-	$date 			= $day.'-'.$month.'-'.$year;
-	$work 			= $form_state['values']['work'];
-
-	$validateAlphanumeric = _validate_alphanumeric_string($name);
-	$validateNumeric = _validate_numeric($identification, $error_message);
-	$getNameWork = _get_name_work($work);
-
-	$validate = TRUE;
-
-	if (!$validateAlphanumeric == TRUE) {
-		form_set_error($name, t('The name field only accepts alphanumeric characters'));
-		$validate = FALSE;
-	}
-	if (!$validateNumeric == TRUE) {
-		form_set_error($identification, t($error_message));
-		$validate = FALSE;
-	}
-
-	if ($validate) {
-		_insert_values_database($identification, $name, $date, $work);
-	}	else {
-			watchdog('Dayscript', "There are inconsistencies filling out the form", NULL, WATCHDOG_ERROR);
-	}
+/**
+ * Implements hook_help().
+ */
+function dayscript_help($path, $arg) {
+   switch ($path) {
+     case 'admin/help#dayscript':
+       return check_markup(file_get_contents( dirname(__FILE__) . "/README.txt") );
+   }
 }

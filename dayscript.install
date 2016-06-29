@@ -12,6 +12,21 @@
  */
 
 /**
+ * Implements hook_entity_info().
+ */
+function dayscript_entity_info() {
+  return array(
+      'dayscrips' => array(
+      'label' => t('Dayscrips table'),
+      'base table' => 'example_users',
+      'entity keys' => array(
+        'id' => 'uid',
+      ),
+    ),
+  );
+}
+
+/**
 * Implements hook_schema()
 */
 function dayscript_schema() {
@@ -27,7 +42,7 @@ function dayscript_schema() {
 	    		),
 
 				'name' => array(
-					'description' => t('Name'),
+					'description' => 'Name',
 					'type' => 'varchar',
 					'length' => 255,
 					'not null' => TRUE,
@@ -35,7 +50,7 @@ function dayscript_schema() {
 				),
 
 				'identification' => array(
-					'description' => t('Identification'),
+					'description' => 'Identification',
 					'type' => 'int',
 					'unsigned' => TRUE,
 					'not null' => TRUE,        
@@ -43,7 +58,7 @@ function dayscript_schema() {
 				),
 
 				'date' => array(
-					'description' => t('Born date'),
+					'description' => 'Born date',
 					'type' => 'varchar',
 					'length' => 255,
 					'not null' => TRUE,
@@ -51,7 +66,7 @@ function dayscript_schema() {
 				),      
 
 				'work' => array(
-					'description' => t('Work'),
+					'description' => 'Work',
 					'type' => 'varchar',
 					'length' => 255,
 					'not null' => TRUE,
@@ -60,7 +75,7 @@ function dayscript_schema() {
 
 
 				'state' => array(
-					'description' => t('State'),
+					'description' => 'State',
 					'type' => 'int',
 					'unsigned' => TRUE,
 					'not null' => TRUE,        

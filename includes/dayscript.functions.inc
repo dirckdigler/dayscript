@@ -59,47 +59,6 @@ function _validate_numeric($value, &$error_message) {
 	}
 }
 
-
-/**
-* Insert values catched by the form.
-*
-* @param $identification
-*	A integer containing an identification
-* @param $name
-*   A string containing a name.
-* @param $date
-*   A string containing the born-date.
-* @param $work
-*   A string containing kind of job.
-* @return
-*	TRUE if there was a record in the database.
-*/
-function _insert_values_database($identification, $name, $date, $work) {
-
-	$state = ($work == 0) ? 1 : 0;
-	$setNameWork = _get_name_work($work);
-
-	$nid = db_insert('example_users') -> fields(
-    	array(
-			'name'           => $name,
-			'identification' => $identification,
-			'date'           => $date,
-			'work'           => $setNameWork,
-			'state'          => $state,
-    	)
-  	)-> execute();  
-
-	if ($nid) {
-		$getIdUser = get_id_user($identification);
-
-		watchdog('Dayscript', "successful registration, UID = ".$getIdUser.', user = '.$name, NULL, WATCHDOG_INFO);
-		drupal_set_message(t('Congratulation, you are signed to DayScript'));
-		drupal_goto('<front>');
-
-		return TRUE;
-	} 
-}
-
 /**
  * 
 * Asociative array with kind of jobs values.
